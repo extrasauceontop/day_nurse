@@ -88,7 +88,7 @@ def fetchSinglePage(data_url, findRedirect=False):
                 elif len(test_html) < 2:
                     continue
                 else:
-
+                    driver.quit()
                     return [
                         session,
                         headers,
