@@ -82,9 +82,9 @@ def fetchSinglePage(data_url, findRedirect=False):
                 if findRedirect and response_text.find("window.location.replace") > -1:
 
                     try:
-                        return response_text.split("window.location.replace('")[1].split(
+                        return [session, headers, response_text.split("window.location.replace('")[1].split(
                             "')"
-                        )[0]
+                        )[0]]
                     except Exception:
                         continue
                 elif len(test_html) < 2:
@@ -214,11 +214,27 @@ def fetchSingleStore(page_url, session=None, headers=None):
 
     redirect_urls = body.xpath('//a[contains(@class, "button-website")]/@href')
     if len(redirect_urls) > 0:
-        brand_website = fetchSinglePage(redirect_urls[0], True)
-        brand_website = (urlparse(brand_website).netloc).replace("www.", "")
+        try:
+            url_text = session.get(redirect_urls[0], headers=headers).text
+            with open("file.txt", "w", encoding="utf-8") as output:
+                print(url_text, file=output)
+        except Exception as e:
+            pass
+        
+        try:
+            brand_website = url_text.split("window.location.replace(")[1].split(")")[0]
+        except Exception:
+            brand_website_session = fetchSinglePage(redirect_urls[0], True)
+            brand_website = brand_website_session[2]
+            session = brand_website_session[0]
+            headers = brand_website_session[1]
+
+            brand_website = (urlparse(brand_website).netloc).replace("www.", "")
 
     else:
         brand_website = MISSING
+    
+    print(brand_website)
 
     return [
         session,
@@ -302,20 +318,3 @@ def scrape():
 
 if __name__ == "__main__":
     scrape()
-
-
-
-    # try:
-    #     phone_soup = bs(response_text, "html.parser")
-    #     phone_link = phone_soup.find("a", attrs={"id": "brochure_phone"})["href"]
-    #     phone_response = session.get(phone_link, headers=headers).text
-    #     response_soup = bs(phone_response, "html.parser")
-    #     phone = (
-    #         response_soup.find("div", attrs={"class": "contacts_telephone"})
-    #         .find("a")
-    #         .text.strip()
-    #     )
-    #     return phone
-    # except Exception as e:
-    #     log.error("error loading phone", e)
-    #     return "broken"

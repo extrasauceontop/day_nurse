@@ -1,0 +1,43 @@
+
+		<html>
+		<head>
+			<title>daynurseries.co.uk</title>
+			<meta name="robots" content="noindex" />
+			<meta name="referrer" content="always" />
+
+			
+			<script src="https://www.googletagmanager.com/gtag/js?id=UA-1852693-1"></script>
+			<script>
+				window.dataLayer = window.dataLayer || [];
+				function gtag(){dataLayer.push(arguments);}
+				gtag('js', new Date());
+				gtag(
+					'config',
+					'UA-1852693-1',
+					{
+						'custom_map' : {
+							'dimension1' : 'dimension_1',
+							'dimension2' : 'dimension_2'
+						},
+						'transport_type' : 'beacon',
+						'send_page_view' : false
+					}
+				);
+
+				// send our own page view with a function to redirect afterward
+				gtag( 'event', 'page_view', { 'event_callback': redirect } );
+
+				function redirect(){
+					window.location.replace('http://www.herondaynursery.co.uk'); // Acts as an HTTP redirect
+					// window.location.href = 'http://www.herondaynursery.co.uk'; // Acts as a click
+				}
+			</script>
+		</head>
+		<body>
+			
+				<p style="text-align: center;">Please note, you are leaving daynurseries.co.uk, and are being forwarded to an external website.</p>
+			
+			<p style="text-align: center;">If you are not forwarded automatically, please <a href="http://www.herondaynursery.co.uk" rel="nofollow" >click here</a>.</p>
+		</body>
+		</html>
+		
