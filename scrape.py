@@ -67,38 +67,40 @@ def fetchSinglePage(data_url, findRedirect=False):
     incap_url = website + incap_str
     session.get(incap_url)
 
-    for request in driver.requests:
-        headers = request.headers
-        try:
-            response = session.get(data_url, headers=headers)
-            response_text = response.text
+    for x in range(10):
+        print("try: " + str(x))
+        for request in driver.requests:
+            headers = request.headers
+            try:
+                response = session.get(data_url, headers=headers)
+                response_text = response.text
 
-            test_html = response_text.split("div")
+                test_html = response_text.split("div")
 
-            if findRedirect and response_text.find("window.location.replace") > -1:
+                if findRedirect and response_text.find("window.location.replace") > -1:
 
-                try:
-                    return response_text.split("window.location.replace('")[1].split(
-                        "')"
-                    )[0]
-                except Exception:
+                    try:
+                        return response_text.split("window.location.replace('")[1].split(
+                            "')"
+                        )[0]
+                    except Exception:
+                        continue
+                elif len(test_html) < 2:
                     continue
-            elif len(test_html) < 2:
+                else:
+
+                    return [
+                        session,
+                        headers,
+                        {
+                            "response": response_text,
+                            "hours_of_operation": getHoursOfOperation(),
+                            "phone": getPhone(),
+                        },
+                    ]
+
+            except Exception:
                 continue
-            else:
-
-                return [
-                    session,
-                    headers,
-                    {
-                        "response": response_text,
-                        "hours_of_operation": getHoursOfOperation(),
-                        "phone": getPhone(session, headers, response_text),
-                    },
-                ]
-
-        except Exception:
-            continue
 
 
 def getHoursOfOperation():
@@ -126,7 +128,7 @@ def getHoursOfOperation():
 
 
 def getPhone():
-    return "<MISSING>"
+    return "<INACCESSIBLE>"
 
 
 def getScriptWithGeo(body):
