@@ -97,7 +97,7 @@ def fetchSinglePage(data_url, findRedirect=False):
                         {
                             "response": response_text,
                             "hours_of_operation": getHoursOfOperation(),
-                            "phone": getPhone(),
+                            "phone": getPhone(session, headers, response_text),
                         },
                     ]
 
@@ -129,7 +129,7 @@ def getHoursOfOperation():
     return MISSING
 
 
-def getPhone():
+def getPhone(session, headers, response_text):
     try:
         phone_soup = bs(response_text, "html.parser")
         phone_link = phone_soup.find("a", attrs={"id": "brochure_phone"})["href"]
@@ -143,7 +143,7 @@ def getPhone():
         return phone
     except Exception as e:
         log.error("error loading phone", e)
-        return "<MISSING>"
+        return "broken"
 
 
 def getScriptWithGeo(body):
@@ -203,7 +203,7 @@ def fetchSingleStore(page_url, session=None, headers=None):
             store_response = {
                 "response": response_text,
                 "hours_of_operation": getHoursOfOperation(),
-                "phone": getPhone(),
+                "phone": getPhone(session, headers, response_text),
             }
 
     hours_of_operation = getJSONObjectVariable(store_response, "hours_of_operation")
