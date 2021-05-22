@@ -214,12 +214,9 @@ def fetchSingleStore(page_url, session=None, headers=None):
 
     redirect_urls = body.xpath('//a[contains(@class, "button-website")]/@href')
     if len(redirect_urls) > 0:
-        try:
-            url_text = session.get(redirect_urls[0], headers=headers).text
-            with open("file.txt", "w", encoding="utf-8") as output:
-                print(url_text, file=output)
-        except Exception as e:
-            pass
+
+        url_text = session.get(redirect_urls[0], headers=headers).text
+
         
         try:
             brand_website = url_text.split("window.location.replace(")[1].split(")")[0]
