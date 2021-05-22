@@ -125,7 +125,7 @@ def getHoursOfOperation():
     return MISSING
 
 
-def getPhone(session, headers, response_text):
+def getPhone():
     return "<MISSING>"
 
 
@@ -186,7 +186,7 @@ def fetchSingleStore(page_url, session=None, headers=None):
             store_response = {
                 "response": response_text,
                 "hours_of_operation": getHoursOfOperation(),
-                "phone": getPhone(session, headers, response_text),
+                "phone": getPhone(),
             }
 
     hours_of_operation = getJSONObjectVariable(store_response, "hours_of_operation")
