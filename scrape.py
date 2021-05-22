@@ -44,7 +44,9 @@ COLUMNS = [
 
 session = SgRequests().requests_retry_session()
 log = sglog.SgLogSetup().get_logger(logger_name=website)
-driver = SgChrome(is_headless=True, executable_path=ChromeDriverManager().install()).driver()
+driver = SgChrome(
+    is_headless=True, executable_path=ChromeDriverManager().install()
+).driver()
 
 
 def fetchStores():
@@ -124,20 +126,7 @@ def getHoursOfOperation():
 
 
 def getPhone(session, headers, response_text):
-    try:
-        phone_soup = bs(response_text, "html.parser")
-        phone_link = phone_soup.find("a", attrs={"id": "brochure_phone"})["href"]
-        phone_response = session.get(phone_link, headers=headers).text
-        response_soup = bs(phone_response, "html.parser")
-        phone = (
-            response_soup.find("div", attrs={"class": "contacts_telephone"})
-            .find("a")
-            .text.strip()
-        )
-        return phone
-    except Exception as e:
-        log.error("error loading phone", e)
-        return "broken"
+    return "<MISSING>"
 
 
 def getScriptWithGeo(body):
@@ -309,3 +298,20 @@ def scrape():
 
 if __name__ == "__main__":
     scrape()
+
+
+
+    # try:
+    #     phone_soup = bs(response_text, "html.parser")
+    #     phone_link = phone_soup.find("a", attrs={"id": "brochure_phone"})["href"]
+    #     phone_response = session.get(phone_link, headers=headers).text
+    #     response_soup = bs(phone_response, "html.parser")
+    #     phone = (
+    #         response_soup.find("div", attrs={"class": "contacts_telephone"})
+    #         .find("a")
+    #         .text.strip()
+    #     )
+    #     return phone
+    # except Exception as e:
+    #     log.error("error loading phone", e)
+    #     return "broken"
